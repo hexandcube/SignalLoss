@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "signalloss",
+  "version": "${version}",
+  "name": "SignalLoss",
+  "description": "Get notified when the server connection is interrupted",
+  "authors": [{
+    "name": "Hexandcube",
+    "contact": {
+      "homepage": "https://hexandcube.com",
+      "email": "hexandcube@hexandcube.com"
+  }}],
+  "contact": {
+    "homepage": "https://github.com/hexandcube/SignalLoss",
+    "sources": "https://github.com/hexandcube/SignalLoss",
+    "issues": "https://github.com/hexandcube/SignalLoss/issues"
+  },
+  "license": "Apache-2.0",
+  "icon": "assets/signalloss/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.hexandcube.signalloss.client.SignalLossClient"
+    ]
+  },
+  "mixins": [
+    "signalloss.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
