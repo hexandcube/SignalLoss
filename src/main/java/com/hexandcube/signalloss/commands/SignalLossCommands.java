@@ -36,7 +36,6 @@ public class SignalLossCommands {
                 })
         );
 
-        // NEW: Enabled
         config.then(ClientCommandManager.literal("enabled")
                 .then(ClientCommandManager.argument("value", BoolArgumentType.bool())
                         .executes(context -> {
@@ -87,7 +86,6 @@ public class SignalLossCommands {
                             return 1;
                         })));
 
-        // NEW: Text Color
         config.then(ClientCommandManager.literal("textColor")
                 .then(ClientCommandManager.argument("hex", StringArgumentType.word())
                         .executes(context -> {
@@ -104,7 +102,6 @@ public class SignalLossCommands {
                             }
                         })));
 
-        // NEW: Background Color
         config.then(ClientCommandManager.literal("backgroundColor")
                 .then(ClientCommandManager.argument("hex", StringArgumentType.word())
                         .executes(context -> {
