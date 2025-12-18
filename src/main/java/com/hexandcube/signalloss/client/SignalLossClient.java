@@ -5,8 +5,8 @@ import com.hexandcube.signalloss.config.SignalLossConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
-import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -43,9 +43,7 @@ public class SignalLossClient implements ClientModInitializer {
             resetAll();
         });
 
-        HudLayerRegistrationCallback.EVENT.register(layeredDrawer -> {
-            layeredDrawer.attachLayerAfter(IdentifiedLayer.CHAT, HUD_LAYER, SignalLossClient::render);
-        });
+        HudElementRegistry.attachElementAfter(VanillaHudElements.CHAT, HUD_LAYER, SignalLossClient::render);
     }
 
     private static void render(DrawContext drawContext, RenderTickCounter tickCounter) {

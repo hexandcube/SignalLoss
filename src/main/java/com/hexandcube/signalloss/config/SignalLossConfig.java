@@ -23,7 +23,7 @@ public class SignalLossConfig {
     public boolean drawBackground = true;
     public boolean showInSingleplayer = false;
     public ToastPosition toastPosition = ToastPosition.CENTER;
-    public int textColor = 0xFF5555;
+    public int textColor = 0xFFFF5555;
     public int backgroundColor = 0xA0000000;
 
     public enum ToastPosition {
@@ -60,7 +60,7 @@ public class SignalLossConfig {
         this.drawBackground = true;
         this.showInSingleplayer = false;
         this.toastPosition = ToastPosition.CENTER;
-        this.textColor = 0xFF5555;
+        this.textColor = 0xFFFF5555;
         this.backgroundColor = 0xA0000000;
     }
 }

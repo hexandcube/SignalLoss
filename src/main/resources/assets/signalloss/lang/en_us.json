@@ -11,6 +11,6 @@
   "signalloss.command.set.position": "Toast position set to %s",
   "signalloss.command.set.textcolor": "Text color set to %s",
   "signalloss.command.set.bgcolor": "Background color set to %s",
-  "signalloss.command.error.color": "Invalid color format! Use Hex (e.g. #FF0000 or AARRGGBB)",
+  "signalloss.command.error.color": "Invalid color format! Use an (A)RGB hex code (e.g. #FF0000 or AARRGGBB)",
   "signalloss.command.error.position": "Invalid position! Valid options: LEFT, CENTER, RIGHT"
 }

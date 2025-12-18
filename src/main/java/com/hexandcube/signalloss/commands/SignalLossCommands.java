@@ -153,6 +153,16 @@ public class SignalLossCommands {
         if (input.startsWith("#")) input = input.substring(1);
         else if (input.startsWith("0x")) input = input.substring(2);
 
-        return (int) Long.parseLong(input, 16);
+        if (input.length() != 6 && input.length() != 8) {
+            throw new NumberFormatException("Invalid hex length");
+        }
+
+        long colorVal = Long.parseLong(input, 16);
+
+        if (input.length() == 6) {
+            colorVal |= 0xFF000000L;
+        }
+
+        return (int) colorVal;
     }
 }

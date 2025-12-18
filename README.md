@@ -16,13 +16,14 @@ You can configure the mod in-game using commands or by editing `/config/signallo
 
 **Options:**
 
-| Option | Command | Default | Description |
-| :--- | :--- | :--- | :--- |
-| **Enabled** | `enabled` | `true` | Enable the SignalLoss mod |
+| Option | Command | Default     | Description                                                                                                 |
+| :--- | :--- |:------------|:------------------------------------------------------------------------------------------------------------|
+| **Enabled** | `enabled` | `true`      | Enable the SignalLoss mod                                                                                   |
 | **Timeout Threshold** | `timeoutThreshold` | `2000` (2s) | How long to wait since the last packet was successfully received, before displaying the toast notification. |
-| **Min Warning Time** | `minWarningTime` | `2000` (2s) | Minimum time the toast stays on screen after being triggered, to prevent flickering. |
-| **Linger Time** | `lingerTime` | `1000` (1s) | How long the toast stays on screen after recovery (shows final lag duration). |
-| **Position** | `position` | `CENTER` | Screen position (`LEFT`, `CENTER`, `RIGHT`). |
-| **Text Color** | `textColor` | `#FF5555` | RGB Hex color for the warning text. |
-| **Background Color** | `backgroundColor` | `#A0000000` | ARGB Hex color for the background box (supports alpha). |
-| **Singleplayer** | `showInSingleplayer`| `false` | Enable the SignalLoss mod for the Singleplayer internal server |
+| **Min Warning Time** | `minWarningTime` | `2000` (2s) | Minimum time the toast stays on screen after being triggered, to prevent flickering.                        |
+| **Linger Time** | `lingerTime` | `1000` (1s) | How long the toast stays on screen after recovery (shows final lag duration).                               |
+| **Draw Background** | `drawBackground` | `true`      | Should a background for the toast be rendered                                                               |
+| **Singleplayer** | `showInSingleplayer`| `false`     | Enable the SignalLoss mod for the Singleplayer internal server                                              |
+| **Position** | `position` | `CENTER`    | Screen position (`LEFT`, `CENTER`, `RIGHT`).                                                                |
+| **Text Color** | `textColor` | `#FFFF5555` | ARGB Hex color for the warning text.                                                                        |
+| **Background Color** | `backgroundColor` | `#A0000000` | ARGB Hex color for the background box.                                                                      |
