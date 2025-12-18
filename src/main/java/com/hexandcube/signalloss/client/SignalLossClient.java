@@ -72,7 +72,7 @@ public class SignalLossClient implements ClientModInitializer {
 
         long currentNanoTime = System.nanoTime();
 
-        float deltaSeconds = tickCounter.getLastFrameDuration() / 20.0f;
+        float deltaSeconds = tickCounter.getDynamicDeltaTicks() / 20.0f;
 
         long nanoDiff = currentNanoTime - lastPacketTime;
         long msSinceLastPacket = nanoDiff / 1_000_000;
