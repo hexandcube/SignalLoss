@@ -6,21 +6,21 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SignalLossClient implements ClientModInitializer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("signalloss");
-    private static final Identifier HUD_LAYER = Identifier.of("signalloss", "toast_layer");
+    private static final Identifier HUD_LAYER = Identifier.fromNamespaceAndPath("signalloss", "toast_layer");
 
     public static volatile long lastPacketTime = System.nanoTime();
     private static boolean isSignalLost = false;
@@ -46,9 +46,9 @@ public class SignalLossClient implements ClientModInitializer {
         HudElementRegistry.attachElementAfter(VanillaHudElements.CHAT, HUD_LAYER, SignalLossClient::render);
     }
 
-    private static void render(DrawContext drawContext, RenderTickCounter tickCounter) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.world == null || client.player == null) return;
+    private static void render(GuiGraphics drawContext, DeltaTracker tickCounter) {
+        Minecraft client = Minecraft.getInstance();
+        if (client.level == null || client.player == null) return;
 
         if (!SignalLossConfig.INSTANCE.enabled) {
             if (isSignalLost || animationProgress > 0) {
@@ -57,7 +57,7 @@ public class SignalLossClient implements ClientModInitializer {
             return;
         }
 
-        if (client.isInSingleplayer() && !SignalLossConfig.INSTANCE.showInSingleplayer) {
+        if (client.isLocalServer() && !SignalLossConfig.INSTANCE.showInSingleplayer) {
             resetLogicState();
             return;
         }
@@ -70,7 +70,7 @@ public class SignalLossClient implements ClientModInitializer {
 
         long currentNanoTime = System.nanoTime();
 
-        float deltaSeconds = tickCounter.getDynamicDeltaTicks() / 20.0f;
+        float deltaSeconds = tickCounter.getGameTimeDeltaTicks() / 20.0f;
 
         long nanoDiff = currentNanoTime - lastPacketTime;
         long msSinceLastPacket = nanoDiff / 1_000_000;
@@ -113,13 +113,13 @@ public class SignalLossClient implements ClientModInitializer {
         } else {
             animationProgress -= deltaSeconds * animationSpeed;
         }
-        animationProgress = MathHelper.clamp(animationProgress, 0f, 1f);
+        animationProgress = Mth.clamp(animationProgress, 0f, 1f);
 
         if (animationProgress > 0) {
             double displayTime = isOverThreshold ? lagSeconds : displayedLagTime;
             String timeString = String.format("%.1f", displayTime);
-            Text text = Text.translatable("signalloss.toast.lost", timeString);
-            renderToast(drawContext, client.textRenderer, client.getWindow().getScaledWidth(), text, animationProgress);
+            Component text = Component.translatable("signalloss.toast.lost", timeString);
+            renderToast(drawContext, client.font, client.getWindow().getGuiScaledWidth(), text, animationProgress);
         }
     }
 
@@ -137,11 +137,11 @@ public class SignalLossClient implements ClientModInitializer {
         displayedLagTime = 0;
     }
 
-    private static void renderToast(DrawContext context, TextRenderer textRenderer, int screenWidth, Text text, float progress) {
+    private static void renderToast(GuiGraphics context, Font textRenderer, int screenWidth, Component text, float progress) {
         float easedProgress = 1 - (1 - progress) * (1 - progress);
 
-        int textWidth = textRenderer.getWidth(text);
-        int textHeight = textRenderer.fontHeight;
+        int textWidth = textRenderer.width(text);
+        int textHeight = textRenderer.lineHeight;
         int padding = 6;
         int totalHeight = textHeight + (padding * 2);
 
@@ -155,12 +155,12 @@ public class SignalLossClient implements ClientModInitializer {
 
         int hiddenY = -totalHeight - 5;
         int visibleY = 10;
-        int y = (int) MathHelper.lerp(easedProgress, hiddenY, visibleY);
+        int y = (int) Mth.lerpInt(easedProgress, hiddenY, visibleY);
 
         if (SignalLossConfig.INSTANCE.drawBackground) {
             context.fill(x - padding, y - padding, x + textWidth + padding, y + textHeight + padding, SignalLossConfig.INSTANCE.backgroundColor);
         }
 
-        context.drawTextWithShadow(textRenderer, text, x, y, SignalLossConfig.INSTANCE.textColor);
+        context.drawString(textRenderer, text, x, y, SignalLossConfig.INSTANCE.textColor);
     }
 }

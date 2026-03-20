@@ -8,9 +8,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.command.CommandSource;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
 
 public class SignalLossCommands {
 
@@ -20,7 +20,7 @@ public class SignalLossCommands {
         root.then(ClientCommandManager.literal("reload")
                 .executes(context -> {
                     SignalLossConfig.load();
-                    context.getSource().sendFeedback(Text.translatable("signalloss.command.reload").formatted(Formatting.GREEN));
+                    context.getSource().sendFeedback(Component.translatable("signalloss.command.reload").withStyle(ChatFormatting.GREEN));
                     return 1;
                 })
         );
@@ -31,7 +31,7 @@ public class SignalLossCommands {
                 .executes(context -> {
                     SignalLossConfig.INSTANCE.reset();
                     SignalLossConfig.save();
-                    context.getSource().sendFeedback(Text.translatable("signalloss.command.reset").formatted(Formatting.GREEN));
+                    context.getSource().sendFeedback(Component.translatable("signalloss.command.reset").withStyle(ChatFormatting.GREEN));
                     return 1;
                 })
         );
@@ -42,7 +42,7 @@ public class SignalLossCommands {
                             boolean val = BoolArgumentType.getBool(context, "value");
                             SignalLossConfig.INSTANCE.enabled = val;
                             SignalLossConfig.save();
-                            context.getSource().sendFeedback(Text.translatable("signalloss.command.set.enabled", val).formatted(Formatting.YELLOW));
+                            context.getSource().sendFeedback(Component.translatable("signalloss.command.set.enabled", val).withStyle(ChatFormatting.YELLOW));
                             return 1;
                         })));
 
@@ -52,7 +52,7 @@ public class SignalLossCommands {
                             int val = IntegerArgumentType.getInteger(context, "milliseconds");
                             SignalLossConfig.INSTANCE.timeoutThreshold = val;
                             SignalLossConfig.save();
-                            context.getSource().sendFeedback(Text.translatable("signalloss.command.set.timeout", val).formatted(Formatting.YELLOW));
+                            context.getSource().sendFeedback(Component.translatable("signalloss.command.set.timeout", val).withStyle(ChatFormatting.YELLOW));
                             return 1;
                         })));
 
@@ -62,7 +62,7 @@ public class SignalLossCommands {
                             int val = IntegerArgumentType.getInteger(context, "milliseconds");
                             SignalLossConfig.INSTANCE.minWarningTime = val;
                             SignalLossConfig.save();
-                            context.getSource().sendFeedback(Text.translatable("signalloss.command.set.min_warning", val).formatted(Formatting.YELLOW));
+                            context.getSource().sendFeedback(Component.translatable("signalloss.command.set.min_warning", val).withStyle(ChatFormatting.YELLOW));
                             return 1;
                         })));
 
@@ -72,7 +72,7 @@ public class SignalLossCommands {
                             int val = IntegerArgumentType.getInteger(context, "milliseconds");
                             SignalLossConfig.INSTANCE.lingerTime = val;
                             SignalLossConfig.save();
-                            context.getSource().sendFeedback(Text.translatable("signalloss.command.set.linger", val).formatted(Formatting.YELLOW));
+                            context.getSource().sendFeedback(Component.translatable("signalloss.command.set.linger", val).withStyle(ChatFormatting.YELLOW));
                             return 1;
                         })));
 
@@ -82,7 +82,7 @@ public class SignalLossCommands {
                             boolean val = BoolArgumentType.getBool(context, "visible");
                             SignalLossConfig.INSTANCE.drawBackground = val;
                             SignalLossConfig.save();
-                            context.getSource().sendFeedback(Text.translatable("signalloss.command.set.background", val).formatted(Formatting.YELLOW));
+                            context.getSource().sendFeedback(Component.translatable("signalloss.command.set.background", val).withStyle(ChatFormatting.YELLOW));
                             return 1;
                         })));
 
@@ -94,10 +94,10 @@ public class SignalLossCommands {
                                 int color = parseColor(hex);
                                 SignalLossConfig.INSTANCE.textColor = color;
                                 SignalLossConfig.save();
-                                context.getSource().sendFeedback(Text.translatable("signalloss.command.set.textcolor", String.format("#%08X", color)).formatted(Formatting.YELLOW));
+                                context.getSource().sendFeedback(Component.translatable("signalloss.command.set.textcolor", String.format("#%08X", color)).withStyle(ChatFormatting.YELLOW));
                                 return 1;
                             } catch (NumberFormatException e) {
-                                context.getSource().sendError(Text.translatable("signalloss.command.error.color"));
+                                context.getSource().sendError(Component.translatable("signalloss.command.error.color"));
                                 return 0;
                             }
                         })));
@@ -110,10 +110,10 @@ public class SignalLossCommands {
                                 int color = parseColor(hex);
                                 SignalLossConfig.INSTANCE.backgroundColor = color;
                                 SignalLossConfig.save();
-                                context.getSource().sendFeedback(Text.translatable("signalloss.command.set.bgcolor", String.format("#%08X", color)).formatted(Formatting.YELLOW));
+                                context.getSource().sendFeedback(Component.translatable("signalloss.command.set.bgcolor", String.format("#%08X", color)).withStyle(ChatFormatting.YELLOW));
                                 return 1;
                             } catch (NumberFormatException e) {
-                                context.getSource().sendError(Text.translatable("signalloss.command.error.color"));
+                                context.getSource().sendError(Component.translatable("signalloss.command.error.color"));
                                 return 0;
                             }
                         })));
@@ -124,23 +124,23 @@ public class SignalLossCommands {
                             boolean val = BoolArgumentType.getBool(context, "enabled");
                             SignalLossConfig.INSTANCE.showInSingleplayer = val;
                             SignalLossConfig.save();
-                            context.getSource().sendFeedback(Text.translatable("signalloss.command.set.singleplayer", val).formatted(Formatting.YELLOW));
+                            context.getSource().sendFeedback(Component.translatable("signalloss.command.set.singleplayer", val).withStyle(ChatFormatting.YELLOW));
                             return 1;
                         })));
 
         config.then(ClientCommandManager.literal("position")
                 .then(ClientCommandManager.argument("pos", StringArgumentType.word())
-                        .suggests((context, builder) -> CommandSource.suggestMatching(new String[]{"LEFT", "CENTER", "RIGHT"}, builder))
+                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(new String[]{"LEFT", "CENTER", "RIGHT"}, builder))
                         .executes(context -> {
                             String input = StringArgumentType.getString(context, "pos").toUpperCase();
                             try {
                                 SignalLossConfig.ToastPosition newPos = SignalLossConfig.ToastPosition.valueOf(input);
                                 SignalLossConfig.INSTANCE.toastPosition = newPos;
                                 SignalLossConfig.save();
-                                context.getSource().sendFeedback(Text.translatable("signalloss.command.set.position", newPos.name()).formatted(Formatting.YELLOW));
+                                context.getSource().sendFeedback(Component.translatable("signalloss.command.set.position", newPos.name()).withStyle(ChatFormatting.YELLOW));
                                 return 1;
                             } catch (IllegalArgumentException e) {
-                                context.getSource().sendError(Text.translatable("signalloss.command.error.position"));
+                                context.getSource().sendError(Component.translatable("signalloss.command.error.position"));
                                 return 0;
                             }
                         })));
