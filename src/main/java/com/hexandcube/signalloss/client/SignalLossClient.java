@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
@@ -46,7 +46,7 @@ public class SignalLossClient implements ClientModInitializer {
         HudElementRegistry.attachElementAfter(VanillaHudElements.CHAT, HUD_LAYER, SignalLossClient::render);
     }
 
-    private static void render(GuiGraphics drawContext, DeltaTracker tickCounter) {
+    private static void render(GuiGraphicsExtractor drawContext, DeltaTracker tickCounter) {
         Minecraft client = Minecraft.getInstance();
         if (client.level == null || client.player == null) return;
 
@@ -137,7 +137,7 @@ public class SignalLossClient implements ClientModInitializer {
         displayedLagTime = 0;
     }
 
-    private static void renderToast(GuiGraphics context, Font textRenderer, int screenWidth, Component text, float progress) {
+    private static void renderToast(GuiGraphicsExtractor context, Font textRenderer, int screenWidth, Component text, float progress) {
         float easedProgress = 1 - (1 - progress) * (1 - progress);
 
         int textWidth = textRenderer.width(text);
@@ -161,6 +161,6 @@ public class SignalLossClient implements ClientModInitializer {
             context.fill(x - padding, y - padding, x + textWidth + padding, y + textHeight + padding, SignalLossConfig.INSTANCE.backgroundColor);
         }
 
-        context.drawString(textRenderer, text, x, y, SignalLossConfig.INSTANCE.textColor);
+        context.text(textRenderer, text, x, y, SignalLossConfig.INSTANCE.textColor, true);
     }
 }

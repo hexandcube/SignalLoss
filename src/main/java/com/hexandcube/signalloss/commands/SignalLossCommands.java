@@ -6,7 +6,7 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -15,9 +15,9 @@ import net.minecraft.network.chat.Component;
 public class SignalLossCommands {
 
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-        LiteralArgumentBuilder<FabricClientCommandSource> root = ClientCommandManager.literal("signalloss");
+        LiteralArgumentBuilder<FabricClientCommandSource> root = ClientCommands.literal("signalloss");
 
-        root.then(ClientCommandManager.literal("reload")
+        root.then(ClientCommands.literal("reload")
                 .executes(context -> {
                     SignalLossConfig.load();
                     context.getSource().sendFeedback(Component.translatable("signalloss.command.reload").withStyle(ChatFormatting.GREEN));
@@ -25,9 +25,9 @@ public class SignalLossCommands {
                 })
         );
 
-        LiteralArgumentBuilder<FabricClientCommandSource> config = ClientCommandManager.literal("config");
+        LiteralArgumentBuilder<FabricClientCommandSource> config = ClientCommands.literal("config");
 
-        config.then(ClientCommandManager.literal("reset")
+        config.then(ClientCommands.literal("reset")
                 .executes(context -> {
                     SignalLossConfig.INSTANCE.reset();
                     SignalLossConfig.save();
@@ -36,8 +36,8 @@ public class SignalLossCommands {
                 })
         );
 
-        config.then(ClientCommandManager.literal("enabled")
-                .then(ClientCommandManager.argument("value", BoolArgumentType.bool())
+        config.then(ClientCommands.literal("enabled")
+                .then(ClientCommands.argument("value", BoolArgumentType.bool())
                         .executes(context -> {
                             boolean val = BoolArgumentType.getBool(context, "value");
                             SignalLossConfig.INSTANCE.enabled = val;
@@ -46,8 +46,8 @@ public class SignalLossCommands {
                             return 1;
                         })));
 
-        config.then(ClientCommandManager.literal("timeoutThreshold")
-                .then(ClientCommandManager.argument("milliseconds", IntegerArgumentType.integer(0))
+        config.then(ClientCommands.literal("timeoutThreshold")
+                .then(ClientCommands.argument("milliseconds", IntegerArgumentType.integer(0))
                         .executes(context -> {
                             int val = IntegerArgumentType.getInteger(context, "milliseconds");
                             SignalLossConfig.INSTANCE.timeoutThreshold = val;
@@ -56,8 +56,8 @@ public class SignalLossCommands {
                             return 1;
                         })));
 
-        config.then(ClientCommandManager.literal("minWarningTime")
-                .then(ClientCommandManager.argument("milliseconds", IntegerArgumentType.integer(0))
+        config.then(ClientCommands.literal("minWarningTime")
+                .then(ClientCommands.argument("milliseconds", IntegerArgumentType.integer(0))
                         .executes(context -> {
                             int val = IntegerArgumentType.getInteger(context, "milliseconds");
                             SignalLossConfig.INSTANCE.minWarningTime = val;
@@ -66,8 +66,8 @@ public class SignalLossCommands {
                             return 1;
                         })));
 
-        config.then(ClientCommandManager.literal("lingerTime")
-                .then(ClientCommandManager.argument("milliseconds", IntegerArgumentType.integer(0))
+        config.then(ClientCommands.literal("lingerTime")
+                .then(ClientCommands.argument("milliseconds", IntegerArgumentType.integer(0))
                         .executes(context -> {
                             int val = IntegerArgumentType.getInteger(context, "milliseconds");
                             SignalLossConfig.INSTANCE.lingerTime = val;
@@ -76,8 +76,8 @@ public class SignalLossCommands {
                             return 1;
                         })));
 
-        config.then(ClientCommandManager.literal("drawBackground")
-                .then(ClientCommandManager.argument("visible", BoolArgumentType.bool())
+        config.then(ClientCommands.literal("drawBackground")
+                .then(ClientCommands.argument("visible", BoolArgumentType.bool())
                         .executes(context -> {
                             boolean val = BoolArgumentType.getBool(context, "visible");
                             SignalLossConfig.INSTANCE.drawBackground = val;
@@ -86,8 +86,8 @@ public class SignalLossCommands {
                             return 1;
                         })));
 
-        config.then(ClientCommandManager.literal("textColor")
-                .then(ClientCommandManager.argument("hex", StringArgumentType.word())
+        config.then(ClientCommands.literal("textColor")
+                .then(ClientCommands.argument("hex", StringArgumentType.word())
                         .executes(context -> {
                             String hex = StringArgumentType.getString(context, "hex");
                             try {
@@ -102,8 +102,8 @@ public class SignalLossCommands {
                             }
                         })));
 
-        config.then(ClientCommandManager.literal("backgroundColor")
-                .then(ClientCommandManager.argument("hex", StringArgumentType.word())
+        config.then(ClientCommands.literal("backgroundColor")
+                .then(ClientCommands.argument("hex", StringArgumentType.word())
                         .executes(context -> {
                             String hex = StringArgumentType.getString(context, "hex");
                             try {
@@ -118,8 +118,8 @@ public class SignalLossCommands {
                             }
                         })));
 
-        config.then(ClientCommandManager.literal("showInSingleplayer")
-                .then(ClientCommandManager.argument("enabled", BoolArgumentType.bool())
+        config.then(ClientCommands.literal("showInSingleplayer")
+                .then(ClientCommands.argument("enabled", BoolArgumentType.bool())
                         .executes(context -> {
                             boolean val = BoolArgumentType.getBool(context, "enabled");
                             SignalLossConfig.INSTANCE.showInSingleplayer = val;
@@ -128,8 +128,8 @@ public class SignalLossCommands {
                             return 1;
                         })));
 
-        config.then(ClientCommandManager.literal("position")
-                .then(ClientCommandManager.argument("pos", StringArgumentType.word())
+        config.then(ClientCommands.literal("position")
+                .then(ClientCommands.argument("pos", StringArgumentType.word())
                         .suggests((context, builder) -> SharedSuggestionProvider.suggest(new String[]{"LEFT", "CENTER", "RIGHT"}, builder))
                         .executes(context -> {
                             String input = StringArgumentType.getString(context, "pos").toUpperCase();
