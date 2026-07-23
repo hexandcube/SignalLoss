@@ -25,6 +25,7 @@ public class SignalLossConfig {
     public ToastPosition toastPosition = ToastPosition.CENTER;
     public int textColor = 0xFFFF5555;
     public int backgroundColor = 0xA0000000;
+    public String toastMessage = "⚠ Waiting for server...";
 
     public enum ToastPosition {
         LEFT, CENTER, RIGHT
@@ -62,5 +63,6 @@ public class SignalLossConfig {
         this.toastPosition = ToastPosition.CENTER;
         this.textColor = 0xFFFF5555;
         this.backgroundColor = 0xA0000000;
+        this.toastMessage = "⚠ Waiting for server...";
     }
 }
