@@ -118,7 +118,7 @@ public class SignalLossClient implements ClientModInitializer {
         if (animationProgress > 0) {
             double displayTime = isOverThreshold ? lagSeconds : displayedLagTime;
             String timeString = String.format("%.1f", displayTime);
-            Component text = Component.translatable("signalloss.toast.lost", timeString);
+            Component text = Component.literal(String.format(SignalLossConfig.INSTANCE.toastMessage + " (%ss)", timeString));
             renderToast(drawContext, client.font, client.getWindow().getGuiScaledWidth(), text, animationProgress);
         }
     }
