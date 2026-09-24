@@ -145,6 +145,16 @@ public class SignalLossCommands {
                             }
                         })));
 
+        config.then(ClientCommands.literal("toastMessage")
+                .then(ClientCommands.argument("message", StringArgumentType.greedyString())
+                        .executes(context -> {
+                            String ms = StringArgumentType.getString(context, "message");
+                            SignalLossConfig.INSTANCE.toastMessage = ms;
+                            SignalLossConfig.save();
+                            context.getSource().sendFeedback(Component.literal("Toast message set to: ").append(Component.literal(ms).withStyle(ChatFormatting.YELLOW)));
+                            return 1;
+                        })));
+
         root.then(config);
         dispatcher.register(root);
     }

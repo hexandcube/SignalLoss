@@ -1,5 +1,4 @@
 {
-  "signalloss.toast.lost": "⚠ Waiting for server... (%ss)",
   "signalloss.command.reload": "SignalLoss config reloaded!",
   "signalloss.command.reset": "SignalLoss config has been reset to default!",
   "signalloss.command.set.enabled": "SignalLoss enabled: %s",
